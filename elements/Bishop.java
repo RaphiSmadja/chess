@@ -3,10 +3,10 @@ package A1D.elements;
 import A1D.Cell;
 import A1D.Position;
 
-public class Bishop extends Element{
+public class Bishop extends Piece {
 
-    public Bishop(Position position, int color) {
-        super(position, color);
+    public Bishop(int color) {
+        super(color);
     }
 
     @Override

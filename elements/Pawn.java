@@ -3,14 +3,15 @@ package A1D.elements;
 import A1D.Cell;
 import A1D.Position;
 
-public class Pawn extends Element{
+public class Pawn extends Piece {
 
-    public Pawn(Position position, int color) {
-        super(position, color);
+    public Pawn(int color) {
+        super(color);
     }
 
     @Override
     public boolean isValidMove(Position newPosition, Cell[][] board) {
+        System.out.println(newPosition);
         return false;
     }
 

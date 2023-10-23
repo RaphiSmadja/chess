@@ -1,15 +1,15 @@
 package A1D;
 
-import A1D.elements.Element;
+import A1D.elements.Piece;
 
 public class Cell {
     private Position position = null;
     private boolean isEmpty;
-    private Element element;
+    private Piece piece;
 
-    public Cell(boolean isEmpty, Element element, Position position) {
+    public Cell(boolean isEmpty, Piece piece, Position position) {
         this.isEmpty = isEmpty;
-        this.element = element;
+        this.piece = piece;
         this.position = position;
     }
 
@@ -25,11 +25,11 @@ public class Cell {
         isEmpty = empty;
     }
 
-    public Element getElement() {
-        return element;
+    public Piece getElement() {
+        return piece;
     }
 
-    public void setElement(Element element) {
-        this.element = element;
+    public void setElement(Piece piece) {
+        this.piece = piece;
     }
 }

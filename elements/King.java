@@ -3,10 +3,10 @@ package A1D.elements;
 import A1D.Cell;
 import A1D.Position;
 
-public class King extends Element{
+public class King extends Piece {
 
-    public King(Position position, int color) {
-        super(position, color);
+    public King(int color) {
+        super(color);
     }
 
     @Override
