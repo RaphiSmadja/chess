@@ -11,7 +11,16 @@ public class Knight extends Piece {
 
     @Override
     public boolean isValidMove(Position newPosition, Cell[][] board) {
-        return false;
+        int currentRow = getPosition().getRow();
+        int currentCol = getPosition().getColumn();
+        int newRow = newPosition.getRow();
+        int newCol = newPosition.getColumn();
+
+        // Vérifie les différents mouvements en L possibles pour un cavalier
+        int rowDiff = Math.abs(newRow - currentRow);
+        int colDiff = Math.abs(newCol - currentCol);
+
+        return (rowDiff == 2 && colDiff == 1) || (rowDiff == 1 && colDiff == 2);
     }
 
     @Override
