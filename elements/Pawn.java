@@ -11,7 +11,6 @@ public class Pawn extends Piece {
 
     @Override
     public boolean isValidMove(Position newPosition, Cell[][] board) {
-        System.out.println(newPosition);
         int newRow = newPosition.getRow();
         int newCol = newPosition.getColumn() - 'a';
 
