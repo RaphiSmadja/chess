@@ -56,57 +56,46 @@ public class Chess {
     private void initialiseBoard() {
         board = new Cell[8][8];
 
-        board[0][0] = new Cell(false, new Rook(1), new Position('a', 8));
-        board[0][7] = new Cell(false, new Rook(1), new Position('h', 8));
+        // Initialisation des pièces blanches
+        board[0][0] = new Cell(false, new Rook(0), new Position('a', 1));
+        board[0][1] = new Cell(false, new Knight(0), new Position('b', 1));
+        board[0][2] = new Cell(false, new Bishop(0), new Position('c', 1));
+        board[0][3] = new Cell(false, new Queen(0), new Position('d', 1));
+        board[0][4] = new Cell(false, new King(0), new Position('e', 1));
+        board[0][5] = new Cell(false, new Bishop(0), new Position('f', 1));
+        board[0][6] = new Cell(false, new Knight(0), new Position('g', 1));
+        board[0][7] = new Cell(false, new Rook(0), new Position('h', 1));
 
-        board[0][1] = new Cell(false, new Knight(1), new Position('b', 8));
-        board[0][6] = new Cell(false, new Knight(1), new Position('g', 8));
+        for (int i = 0; i < 8; i++) {
+            char col = (char) ('a' + i);
+            board[1][i] = new Cell(false, new Pawn(0, new Position(col, 2)), new Position(col, 2));
+        }
 
-        board[0][2] = new Cell(false, new Bishop(1), new Position('c', 8));
-        board[0][5] = new Cell(false, new Bishop(1), new Position('f', 8));
+        // Initialisation des pièces noires
+        board[7][0] = new Cell(false, new Rook(1), new Position('a', 8));
+        board[7][1] = new Cell(false, new Knight(1), new Position('b', 8));
+        board[7][2] = new Cell(false, new Bishop(1), new Position('c', 8));
+        board[7][3] = new Cell(false, new Queen(1), new Position('d', 8));
+        board[7][4] = new Cell(false, new King(1), new Position('e', 8));
+        board[7][5] = new Cell(false, new Bishop(1), new Position('f', 8));
+        board[7][6] = new Cell(false, new Knight(1), new Position('g', 8));
+        board[7][7] = new Cell(false, new Rook(1), new Position('h', 8));
 
-        board[0][3] = new Cell(false, new Queen(1), new Position('d', 8));
-        board[0][4] = new Cell(false, new King(1), new Position('d', 8));
+        for (int i = 0; i < 8; i++) {
+            char col = (char) ('a' + i);
+            board[6][i] = new Cell(false, new Pawn(1, new Position(col, 7)), new Position(col, 7));
+        }
 
-        initialisePawns(1, 1);
-
-        board[7][0] = new Cell(false, new Rook(0), new Position('a', 1));
-        board[7][7] = new Cell(false, new Rook(0), new Position('h', 1));
-
-        board[7][1] = new Cell(false, new Knight(0), new Position('b', 1));
-        board[7][6] = new Cell(false, new Knight(0), new Position('g', 1));
-
-        board[7][2] = new Cell(false, new Bishop(0), new Position('c', 1));
-        board[7][5] = new Cell(false, new Bishop(0), new Position('f', 1));
-
-        board[7][3] = new Cell(false, new Queen(0), new Position('d', 1));
-        board[7][4] = new Cell(false, new King(0), new Position('d', 1));
-
-
-        initialisePawns(6, 0);
-
-
-        int col = 0;
-
-        // ASCII table
-        for (int i = 2; i < 6; i++) {
-            col = 96;
-            for (int j = 0; j < 8; j++) {
-                board[i][j] = new Cell(true, null, new Position((char) col, i));
+        // Remplissez le reste du plateau avec des cases vides
+        for (int row = 2; row < 6; row++) {
+            for (int col = 0; col < 8; col++) {
+                board[row][col] = new Cell(true, null, new Position((char) ('a' + col), row + 1));
             }
         }
     }
 
-    private void initialisePawns(int line, int color) {
-        int charToInt = 96;
-        int row = line + 1;
-        for (int i = 0; i < 8; i++) {
-            board[line][i] = new Cell(false, new Pawn(color), new Position((char) charToInt++, row));
-        }
-    }
-
     private void printBoard() {
-        for (int i = 0; i < 8; i++) {
+        for (int i = 7; i >= 0; i--) {
             for (int j = 0; j < 8; j++) {
                 if (board[i][j].getElement() != null) {
                     if (board[i][j].getElement().getColor() == 1) {
@@ -135,25 +124,67 @@ public class Chess {
     }
 
     private boolean isValidMove(String move) {
-        String[] coup = move.split("");
-        int col = coup[0].charAt(0) - 97;
-        int li = Integer.parseInt(coup[1]) - 1;
+        String[] coup = move.split(" ");
 
-        if (board[li][col].isEmpty()) {
+        if (coup.length != 2) {
             return false;
         }
-        Piece piece = board[li][col].getElement();
-        piece.setPosition(new Position(coup[3].charAt(0), Integer.parseInt(coup[4])));
-        piece.isValidMove(piece.getPosition(), board);
+
+        String fromPosition = coup[0];
+        String toPosition = coup[1];
+
+        int fromCol = fromPosition.charAt(0) - 97;
+        int fromRow = Integer.parseInt(fromPosition.substring(1)) - 1;
+
+        int toCol = toPosition.charAt(0) - 'a';
+        int toRow = Integer.parseInt(toPosition.substring(1)) - 1;
+
+        if (isValidPosition(fromRow, fromCol) && isValidPosition(toRow, toCol)) {
+            Piece piece = board[fromRow][fromCol].getElement();
+
+            // Utilisez la valeur de retour pour vérifier si le mouvement est valide
+            boolean isValid = piece.isValidMove(new Position(toPosition.charAt(0), toRow), board);
+
+            return isValid;
+        }
         return false;
     }
 
-    private void updateBoard(String move) {
 
+    private boolean isValidPosition(int row, int col) {
+        return row >= 0 && row < 8 && col >= 0 && col < 8;
+    }
+
+    private void updateBoard(String move) {
+        // Divisez la chaîne de mouvement en ses composants (position de départ et d'arrivée).
+        String[] parts = move.split(" ");
+        String fromPosition = parts[0];
+        String toPosition = parts[1];
+
+        // Convertissez les positions en indices de tableau (ligne et colonne).
+        int fromRow = fromPosition.charAt(1) - '1';
+        int fromCol = fromPosition.charAt(0) - 'a';
+        int toRow = toPosition.charAt(1) - '1';
+        int toCol = toPosition.charAt(0) - 'a';
+
+        // Vérifiez si la case de départ est vide.
+        if (board[fromRow][fromCol].isEmpty()) {
+            System.out.println("Mouvement invalide : la case de départ est vide.");
+        }
+        // Obtenez la pièce dans la case de départ.
+        Piece piece = board[fromRow][fromCol].getElement();
+
+        // Effectuez le mouvement en mettant à jour le plateau.
+        board[toRow][toCol].setElement(piece);
+        board[fromRow][fromCol].setElement(null);
     }
 
     private void switchPlayer() {
-
+        if (currentPlayer == player[0]) {
+            currentPlayer = player[1];
+        } else {
+            currentPlayer = player[0];
+        }
     }
 
 }

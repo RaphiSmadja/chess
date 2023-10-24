@@ -7,6 +7,11 @@ public abstract class Piece {
     protected Position position;
     protected int color;
 
+    public Piece(int color, Position position) {
+        this.color = color;
+        this.position = position;
+    }
+
     public Piece(int color) {
         this.color = color;
     }
