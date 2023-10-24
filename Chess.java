@@ -57,14 +57,14 @@ public class Chess {
         board = new Cell[8][8];
 
         // Initialisation des pièces blanches
-        board[0][0] = new Cell(false, new Rook(0), new Position('a', 1));
-        board[0][1] = new Cell(false, new Knight(0), new Position('b', 1));
-        board[0][2] = new Cell(false, new Bishop(0), new Position('c', 1));
-        board[0][3] = new Cell(false, new Queen(0), new Position('d', 1));
-        board[0][4] = new Cell(false, new King(0), new Position('e', 1));
-        board[0][5] = new Cell(false, new Bishop(0), new Position('f', 1));
-        board[0][6] = new Cell(false, new Knight(0), new Position('g', 1));
-        board[0][7] = new Cell(false, new Rook(0), new Position('h', 1));
+        board[0][0] = new Cell(false, new Rook(0, new Position('a', 1)), new Position('a', 1));
+        board[0][1] = new Cell(false, new Knight(0, new Position('b', 1)), new Position('b', 1));
+        board[0][2] = new Cell(false, new Bishop(0, new Position('c', 1)), new Position('c', 1));
+        board[0][3] = new Cell(false, new Queen(0, new Position('d', 1)), new Position('d', 1));
+        board[0][4] = new Cell(false, new King(0, new Position('e', 1)), new Position('e', 1));
+        board[0][5] = new Cell(false, new Bishop(0, new Position('f', 1)), new Position('f', 1));
+        board[0][6] = new Cell(false, new Knight(0, new Position('g', 1)), new Position('g', 1));
+        board[0][7] = new Cell(false, new Rook(0, new Position('h', 1)), new Position('h', 1));
 
         for (int i = 0; i < 8; i++) {
             char col = (char) ('a' + i);
@@ -72,14 +72,14 @@ public class Chess {
         }
 
         // Initialisation des pièces noires
-        board[7][0] = new Cell(false, new Rook(1), new Position('a', 8));
-        board[7][1] = new Cell(false, new Knight(1), new Position('b', 8));
-        board[7][2] = new Cell(false, new Bishop(1), new Position('c', 8));
-        board[7][3] = new Cell(false, new Queen(1), new Position('d', 8));
-        board[7][4] = new Cell(false, new King(1), new Position('e', 8));
-        board[7][5] = new Cell(false, new Bishop(1), new Position('f', 8));
-        board[7][6] = new Cell(false, new Knight(1), new Position('g', 8));
-        board[7][7] = new Cell(false, new Rook(1), new Position('h', 8));
+        board[7][0] = new Cell(false, new Rook(1, new Position('a', 8)), new Position('a', 8));
+        board[7][1] = new Cell(false, new Knight(1, new Position('b', 8)), new Position('b', 8));
+        board[7][2] = new Cell(false, new Bishop(1, new Position('c', 8)), new Position('c', 8));
+        board[7][3] = new Cell(false, new Queen(1, new Position('d', 8)), new Position('d', 8));
+        board[7][4] = new Cell(false, new King(1, new Position('e', 8)), new Position('e', 8));
+        board[7][5] = new Cell(false, new Bishop(1, new Position('f', 8)), new Position('f', 8));
+        board[7][6] = new Cell(false, new Knight(1, new Position('g', 8)), new Position('g', 8));
+        board[7][7] = new Cell(false, new Rook(1, new Position('h', 8)), new Position('h', 8));
 
         for (int i = 0; i < 8; i++) {
             char col = (char) ('a' + i);
@@ -133,7 +133,7 @@ public class Chess {
         String fromPosition = coup[0];
         String toPosition = coup[1];
 
-        int fromCol = fromPosition.charAt(0) - 97;
+        int fromCol = fromPosition.charAt(0) - 'a';
         int fromRow = Integer.parseInt(fromPosition.substring(1)) - 1;
 
         int toCol = toPosition.charAt(0) - 'a';
@@ -152,6 +152,7 @@ public class Chess {
 
 
     private boolean isValidPosition(int row, int col) {
+        // vérifie que le mouvement est bien dans le cadre
         return row >= 0 && row < 8 && col >= 0 && col < 8;
     }
 

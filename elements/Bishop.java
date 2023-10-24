@@ -5,7 +5,7 @@ import A1D.Position;
 
 public class Bishop extends Piece {
 
-    public Bishop(int color) {
+    public Bishop(int color, Position position) {
         super(color);
     }
 

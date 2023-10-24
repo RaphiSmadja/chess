@@ -5,7 +5,7 @@ import A1D.Position;
 
 public class Knight extends Piece {
 
-    public Knight(int color) {
+    public Knight(int color, Position position) {
         super(color);
     }
 
