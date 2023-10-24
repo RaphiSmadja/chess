@@ -6,15 +6,15 @@ import A1D.Position;
 public class Knight extends Piece {
 
     public Knight(int color, Position position) {
-        super(color);
+        super(color, position);
     }
 
     @Override
     public boolean isValidMove(Position newPosition, Cell[][] board) {
-        int currentRow = getPosition().getRow();
-        int currentCol = getPosition().getColumn();
         int newRow = newPosition.getRow();
-        int newCol = newPosition.getColumn();
+        int newCol = newPosition.getColumn() - 'a';
+        int currentRow = getPosition().getRow() - 1;
+        int currentCol = getPosition().getColumn() - 'a';
 
         // Vérifie les différents mouvements en L possibles pour un cavalier
         int rowDiff = Math.abs(newRow - currentRow);

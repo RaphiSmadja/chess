@@ -6,15 +6,15 @@ import A1D.Position;
 public class Queen extends Piece {
 
     public Queen(int color, Position position) {
-        super(color);
+        super(color, position);
     }
 
     @Override
     public boolean isValidMove(Position newPosition, Cell[][] board) {
-        int currentRow = getPosition().getRow();
-        int currentCol = getPosition().getColumn();
         int newRow = newPosition.getRow();
-        int newCol = newPosition.getColumn();
+        int newCol = newPosition.getColumn() - 'a';
+        int currentRow = getPosition().getRow() - 1;
+        int currentCol = getPosition().getColumn() - 'a';
 
         int rowDiff = Math.abs(newRow - currentRow);
         int colDiff = Math.abs(newCol - currentCol);
@@ -37,9 +37,17 @@ public class Queen extends Piece {
         return "Q";
     }
     private boolean isStraightPathClear(int startRow, int startCol, int endRow, int endCol, Cell[][] board) {
-        int rowDirection = (endRow - startRow) / Math.abs(endRow - startRow);
-        int colDirection = (endCol - startCol) / Math.abs(endCol - startCol);
-
+        int rowDirection, colDirection;
+        if (endRow - startRow != 0) {
+            rowDirection = (endRow - startRow) / Math.abs(endRow - startRow);
+        } else {
+            rowDirection = 0;
+        }
+        if (endCol - startCol != 0) {
+            colDirection = (endCol - startCol) / Math.abs(endCol - startCol);
+        } else {
+            colDirection = 0;
+        }
         int checkRow = startRow + rowDirection;
         int checkCol = startCol + colDirection;
 

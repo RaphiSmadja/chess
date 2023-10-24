@@ -39,15 +39,20 @@ public class Chess {
         String name2 = scanner.nextLine();
         Player player2 = new Player(name2);
 
-        int choiceP1 = random.nextInt(0, 2);
-        player1.setColor(choiceP1);
+        int choiceP1 = random.nextInt(2);
 
         if (choiceP1 == 0) {
-            currentPlayer = player1;
+            player1.setColor(0);
             player2.setColor(1);
+            currentPlayer = player1;
+            player1.setKingPosition(new Position('e', 1));
+            player2.setKingPosition(new Position('e', 8));
         } else {
-            currentPlayer = player2;
+            player1.setColor(1);
             player2.setColor(0);
+            currentPlayer = player2;
+            player2.setKingPosition(new Position('e', 1));
+            player1.setKingPosition(new Position('e', 8));
         }
         player = new Player[]{player1, player2};
 
@@ -120,6 +125,73 @@ public class Chess {
     }
 
     private boolean isCheckMate() {
+        Position kingPosition = currentPlayer.getKingPosition();
+
+        if (isInCheck(kingPosition)) {
+            // Le roi du joueur actuel est en échec, vérifions s'il y a des mouvements possibles
+
+            for (int row = 0; row < 8; row++) {
+                for (int col = 0; col < 8; col++) {
+                    Piece piece = board[row][col].getElement();
+                    if (piece != null && piece.getColor() == currentPlayer.getColor()) {
+                        Position piecePosition = new Position((char) ('a' + col), row + 1);
+
+                        // Essayez tous les mouvements possibles pour cette pièce
+                        for (int destRow = 0; destRow < 8; destRow++) {
+                            for (int destCol = 0; destCol < 8; destCol++) {
+                                Position destPosition = new Position((char) ('a' + destCol), destRow + 1);
+
+                                if (piece.isValidMove(destPosition, board)) {
+                                    // Effectuez le mouvement temporairement
+                                    Piece destPiece = board[destRow][destCol].getElement();
+                                    board[destRow][destCol].setElement(piece);
+                                    board[row][col].setElement(null);
+
+                                    // Vérifiez si le roi n'est plus en échec
+                                    if (!isInCheck(kingPosition)) {
+                                        // Annulez le mouvement et retournez false car le roi n'est plus en échec
+                                        board[row][col].setElement(piece);
+                                        board[destRow][destCol].setElement(destPiece);
+                                        return false;
+                                    }
+
+                                    // Annulez le mouvement
+                                    board[row][col].setElement(piece);
+                                    board[destRow][destCol].setElement(destPiece);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Si aucun mouvement possible n'a permis de sortir le roi de l'échec, c'est un échec et mat.
+            System.out.println("Échec et mat. Le joueur " + currentPlayer.getName() + " a perdu.");
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean isInCheck(Position kingPosition) {
+        int row = kingPosition.getRow() - 1;
+        int col = kingPosition.getColumn() - 'a';
+
+        // Parcours des cases pour trouver les pièces de l'adversaire
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
+                Piece piece = board[r][c].getElement();
+                if (piece != null && piece.getColor() != currentPlayer.getColor()) {
+                    Position piecePosition = new Position((char) ('a' + c), r + 1);
+
+                    // Vérifie si cette pièce peut attaquer la position du roi
+                    if (piece.isValidMove(kingPosition, board)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
         return false;
     }
 
@@ -174,10 +246,12 @@ public class Chess {
         }
         // Obtenez la pièce dans la case de départ.
         Piece piece = board[fromRow][fromCol].getElement();
-
+        piece.setPosition(new Position(toPosition.charAt(0), toRow + 1));
         // Effectuez le mouvement en mettant à jour le plateau.
         board[toRow][toCol].setElement(piece);
+        board[toRow][toCol].setEmpty(false);
         board[fromRow][fromCol].setElement(null);
+        board[fromRow][fromCol].setEmpty(true);
     }
 
     private void switchPlayer() {

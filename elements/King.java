@@ -6,15 +6,15 @@ import A1D.Position;
 public class King extends Piece {
 
     public King(int color, Position position) {
-        super(color);
+        super(color, position);
     }
 
     @Override
     public boolean isValidMove(Position newPosition, Cell[][] board) {
-        int currentRow = getPosition().getRow();
-        int currentCol = getPosition().getColumn();
         int newRow = newPosition.getRow();
-        int newCol = newPosition.getColumn();
+        int newCol = newPosition.getColumn() - 'a';
+        int currentRow = getPosition().getRow() - 1;
+        int currentCol = getPosition().getColumn() - 'a';
 
         // Vérifie si le mouvement est d'une seule case dans n'importe quelle direction
         if (Math.abs(newRow - currentRow) <= 1 && Math.abs(newCol - currentCol) <= 1) {

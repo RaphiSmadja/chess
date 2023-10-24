@@ -6,15 +6,15 @@ import A1D.Position;
 public class Bishop extends Piece {
 
     public Bishop(int color, Position position) {
-        super(color);
+        super(color, position);
     }
 
     @Override
     public boolean isValidMove(Position newPosition, Cell[][] board) {
-        int currentRow = getPosition().getRow();
-        int currentCol = getPosition().getColumn();
         int newRow = newPosition.getRow();
-        int newCol = newPosition.getColumn()-'a';
+        int newCol = newPosition.getColumn() - 'a';
+        int currentRow = getPosition().getRow() - 1;
+        int currentCol = getPosition().getColumn() - 'a';
 
         // Vérifie si le mouvement est diagonal
         if (Math.abs(newRow - currentRow) != Math.abs(newCol - currentCol)) {
