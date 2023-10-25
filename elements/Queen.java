@@ -19,6 +19,13 @@ public class Queen extends Piece {
         int rowDiff = Math.abs(newRow - currentRow);
         int colDiff = Math.abs(newCol - currentCol);
 
+        // Vérifie si la dame menace le roi adverse
+        if (isThreateningKing(new Position((char) ('a' + newCol), newRow))) {
+            // Le roi adverse est menacé
+            // Vous pouvez réagir en conséquence, par exemple en signalant un échec
+            return true;
+        }
+
         // Vérifie le mouvement en ligne droite (comme la Tour)
         if ((rowDiff == 0 && colDiff > 0) || (rowDiff > 0 && colDiff == 0)) {
             return isStraightPathClear(currentRow, currentCol, newRow, newCol, board);
@@ -79,6 +86,20 @@ public class Queen extends Piece {
         }
 
         return true;
+    }
+
+    private boolean isThreateningKing(Position kingPosition) {
+        int newRow = kingPosition.getRow() - 1;
+        int newCol = kingPosition.getColumn() - 'a';
+
+        int currentRow = getPosition().getRow() - 1;
+        int currentCol = getPosition().getColumn() - 'a';
+
+        int rowDiff = Math.abs(newRow - currentRow);
+        int colDiff = Math.abs(newCol - currentCol);
+
+        // Vérifie si la position du roi est dans la trajectoire de la dame
+        return (rowDiff == 0 && colDiff > 0) || (rowDiff > 0 && colDiff == 0) || (rowDiff == colDiff);
     }
 }
 

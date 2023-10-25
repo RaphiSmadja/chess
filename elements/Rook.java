@@ -19,6 +19,12 @@ public class Rook extends Piece {
         int rowDiff = newRow - currentRow;
         int colDiff = newCol - currentCol;
 
+        if (isThreateningKing(new Position((char) ('a' + newCol), newRow))) {
+            // Le roi adverse est menacé
+            // Vous pouvez réagir en conséquence, par exemple en signalant un échec
+            return true;
+        }
+
         if (rowDiff == 0 || colDiff == 0) {
             // Vérifiez si le chemin est dégagé horizontalement
             if (rowDiff == 0) {
@@ -48,6 +54,15 @@ public class Rook extends Piece {
         return false; // Déplacement invalide
     }
 
+    private boolean isThreateningKing(Position kingPosition) {
+        int newRow = kingPosition.getRow();
+        int newCol = kingPosition.getColumn() - 'a';
+        int currentRow = getPosition().getRow() - 1;
+        int currentCol = getPosition().getColumn() - 'a';
+
+        // Vérifie si la tour menace le roi (en ligne droite)
+        return newRow == currentRow || newCol == currentCol;
+    }
     @Override
     public String toString() {
         return "R";

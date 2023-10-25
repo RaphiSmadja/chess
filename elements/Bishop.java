@@ -16,6 +16,12 @@ public class Bishop extends Piece {
         int currentRow = getPosition().getRow() - 1;
         int currentCol = getPosition().getColumn() - 'a';
 
+        if (isThreateningKing(new Position((char) ('a' + newCol), newRow))) {
+            // Le roi adverse est menacé
+            // Vous pouvez réagir en conséquence, par exemple en signalant un échec
+            return true;
+        }
+
         // Vérifie si le mouvement est diagonal
         if (Math.abs(newRow - currentRow) != Math.abs(newCol - currentCol)) {
             return false;
@@ -39,6 +45,19 @@ public class Bishop extends Piece {
 
         // Vérifie si la case de destination est vide ou a une pièce de couleur opposée
         return board[newRow][newCol].isEmpty() || board[newRow][newCol].getElement().getColor() != getColor();
+    }
+
+    private boolean isThreateningKing(Position kingPosition) {
+        int newRow = kingPosition.getRow();
+        int newCol = kingPosition.getColumn() - 'a';
+        int currentRow = getPosition().getRow() - 1;
+        int currentCol = getPosition().getColumn() - 'a';
+
+        int rowDiff = Math.abs(newRow - currentRow);
+        int colDiff = Math.abs(newCol - currentCol);
+
+        // Vérifie si le fou menace le roi (en diagonale)
+        return rowDiff == colDiff;
     }
 
     @Override

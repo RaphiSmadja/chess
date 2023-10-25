@@ -214,7 +214,10 @@ public class Chess {
 
         if (isValidPosition(fromRow, fromCol) && isValidPosition(toRow, toCol)) {
             Piece piece = board[fromRow][fromCol].getElement();
-
+            if (piece == null) {
+                System.out.println("Impossible");
+                return false;
+            }
             if (piece.getColor() != this.currentPlayer.getColor()) {
                 System.out.println("Impossible");
                 return false;

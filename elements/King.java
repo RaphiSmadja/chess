@@ -16,6 +16,12 @@ public class King extends Piece {
         int currentRow = getPosition().getRow() - 1;
         int currentCol = getPosition().getColumn() - 'a';
 
+        if (isThreateningKing(new Position((char) ('a' + newCol), newRow))) {
+            // Le roi adverse est menacé
+            // Vous pouvez réagir en conséquence, par exemple en signalant un échec
+            return true;
+        }
+
         // Vérifie si le mouvement est d'une seule case dans n'importe quelle direction
         if (Math.abs(newRow - currentRow) <= 1 && Math.abs(newCol - currentCol) <= 1) {
 
@@ -24,6 +30,19 @@ public class King extends Piece {
         }
 
         return false;
+    }
+
+    private boolean isThreateningKing(Position kingPosition) {
+        int newRow = kingPosition.getRow();
+        int newCol = kingPosition.getColumn() - 'a';
+        int currentRow = getPosition().getRow() - 1;
+        int currentCol = getPosition().getColumn() - 'a';
+
+        int rowDiff = Math.abs(newRow - currentRow);
+        int colDiff = Math.abs(newCol - currentCol);
+
+        // Vérifie si le roi menace le roi adverse (en déplacement d'une case)
+        return rowDiff <= 1 && colDiff <= 1;
     }
 
     @Override
