@@ -134,14 +134,14 @@ public class Chess {
         Position kingPosition = currentPlayer.getKingPosition();
 
         if (isInCheck(kingPosition)) {
-            System.out.println("Echec au roi");
             // Le roi du joueur actuel est en échec, vérifions s'il y a des mouvements possibles
+            System.out.println("echec au roi");
+            boolean isCheckMate = true;
 
             for (int row = 0; row < 8; row++) {
                 for (int col = 0; col < 8; col++) {
                     Piece piece = board[row][col].getElement();
                     if (piece != null && piece.getColor() == currentPlayer.getColor()) {
-
                         // Essayez tous les mouvements possibles pour cette pièce
                         for (int destRow = 0; destRow < 8; destRow++) {
                             for (int destCol = 0; destCol < 8; destCol++) {
@@ -155,15 +155,17 @@ public class Chess {
 
                                     // Vérifiez si le roi n'est plus en échec
                                     if (!isInCheck(kingPosition)) {
-                                        // Annulez le mouvement et retournez false car le roi n'est plus en échec
+                                        // Il y a un mouvement possible pour sortir de l'échec
+                                        isCheckMate = false;
+
+                                        // Annulez le mouvement
                                         board[row][col].setElement(piece);
                                         board[destRow][destCol].setElement(destPiece);
-                                        return false;
+                                    } else {
+                                        // Annulez le mouvement si le roi est toujours en échec
+                                        board[row][col].setElement(piece);
+                                        board[destRow][destCol].setElement(destPiece);
                                     }
-
-                                    // Annulez le mouvement
-                                    board[row][col].setElement(piece);
-                                    board[destRow][destCol].setElement(destPiece);
                                 }
                             }
                         }
@@ -171,9 +173,11 @@ public class Chess {
                 }
             }
 
-            // Si aucun mouvement possible n'a permis de sortir le roi de l'échec, c'est un échec et mat.
-            System.out.println("Échec et mat. Le joueur " + currentPlayer.getName() + " a perdu.");
-            return true;
+            if (isCheckMate) {
+                System.out.println("Échec et mat. Le joueur " + currentPlayer.getName() + " a perdu.");
+            }
+
+            return isCheckMate;
         }
 
         return false;
