@@ -120,6 +120,12 @@ public class Chess {
 
     private String askMove() {
         Scanner input = new Scanner(System.in);
+        System.out.println(currentPlayer.getName() + " c'est votre tour ! ");
+        if (currentPlayer.getColor() == 0) {
+            System.out.println("Blanc");
+        } else {
+            System.out.println("Noir");
+        }
         System.out.print("Coup : ");
         return input.nextLine();
     }
@@ -128,13 +134,13 @@ public class Chess {
         Position kingPosition = currentPlayer.getKingPosition();
 
         if (isInCheck(kingPosition)) {
+            System.out.println("Echec au roi");
             // Le roi du joueur actuel est en échec, vérifions s'il y a des mouvements possibles
 
             for (int row = 0; row < 8; row++) {
                 for (int col = 0; col < 8; col++) {
                     Piece piece = board[row][col].getElement();
                     if (piece != null && piece.getColor() == currentPlayer.getColor()) {
-                        Position piecePosition = new Position((char) ('a' + col), row + 1);
 
                         // Essayez tous les mouvements possibles pour cette pièce
                         for (int destRow = 0; destRow < 8; destRow++) {
@@ -174,16 +180,11 @@ public class Chess {
     }
 
     private boolean isInCheck(Position kingPosition) {
-        int row = kingPosition.getRow() - 1;
-        int col = kingPosition.getColumn() - 'a';
-
         // Parcours des cases pour trouver les pièces de l'adversaire
         for (int r = 0; r < 8; r++) {
             for (int c = 0; c < 8; c++) {
                 Piece piece = board[r][c].getElement();
                 if (piece != null && piece.getColor() != currentPlayer.getColor()) {
-                    Position piecePosition = new Position((char) ('a' + c), r + 1);
-
                     // Vérifie si cette pièce peut attaquer la position du roi
                     if (piece.isValidMove(kingPosition, board)) {
                         return true;
@@ -213,6 +214,11 @@ public class Chess {
 
         if (isValidPosition(fromRow, fromCol) && isValidPosition(toRow, toCol)) {
             Piece piece = board[fromRow][fromCol].getElement();
+
+            if (piece.getColor() != this.currentPlayer.getColor()) {
+                System.out.println("Impossible");
+                return false;
+            }
 
             // Utilisez la valeur de retour pour vérifier si le mouvement est valide
             boolean isValid = piece.isValidMove(new Position(toPosition.charAt(0), toRow), board);

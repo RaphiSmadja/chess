@@ -38,7 +38,9 @@ public class Rook extends Piece {
                     }
                 }
             }
-
+            if (board[newRow][newCol].getElement() != null && board[currentRow][currentCol].getElement().getColor() == board[newRow][newCol].getElement().getColor()) {
+                return false;
+            }
             // Le mouvement est valide
             return true;
         }
